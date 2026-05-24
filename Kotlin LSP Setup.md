@@ -1,6 +1,6 @@
 # Kotlin LSP Setup for Neovim in Ubuntu Chroot
 
-This guide outlines a working setup for Kotlin development using Neovim and the Kotlin Language Server.
+This guide outlines a working setup for Kotlin development using Neovim and the Kotlin Language Server, including autocompletion and mobile-optimized UI.
 
 ## 1. Install Java
 
@@ -56,7 +56,7 @@ Server binary path:
 
 ---
 
-## 4. Configure vim-plug
+## 4. Full Configuration (`init.vim`)
 
 Edit or create `~/.config/nvim/init.vim`:
 ```bash
@@ -64,44 +64,89 @@ mkdir -p ~/.config/nvim
 nvim ~/.config/nvim/init.vim
 ```
 
-**Plugin section:**
+> [!TIP]
+> You can find this full configuration file in the repository at [ubuntu/.config/nvim/init.vim](./ubuntu/.config/nvim/init.vim).
+
+Copy and paste the following full configuration:
+
 ```vim
 syntax on
 set termguicolors
+set number
 
 call plug#begin()
 
+" LSP and Treesitter
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
+" Autocompletion
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-nvim-lsp'
+
 call plug#end()
+
+lua << EOF
+local cmp = require('cmp')
+
+cmp.setup({
+  mapping = {
+    ['<Tab>'] = cmp.mapping.select_next_item(),
+    ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    ['<C-Space>'] = cmp.mapping.complete(),
+  },
+
+  sources = {
+    { name = 'nvim_lsp' },
+  },
+})
+
+-- Capabilities for autocompletion
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+-- Kotlin LSP Configuration (Neovim 0.11+ API)
+vim.lsp.config('kotlin_language_server', {
+  cmd = { '/root/kotlin-ls/server/bin/kotlin-language-server' },
+  capabilities = capabilities,
+})
+
+vim.lsp.enable('kotlin_language_server')
+
+-- Mobile-Optimized Diagnostics
+vim.diagnostic.config({
+  virtual_text = false, -- Disable long inline messages for small screens
+  underline = true,    -- Keep code underlining
+  signs = true,        -- Keep gutter markers
+})
+
+-- Keybindings
+vim.keymap.set('n', 'gl', vim.diagnostic.open_float)
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
+
+EOF
+
+" Diagnostic Styling (Undercurls)
+highlight DiagnosticUnderlineError guisp=#ff5555 gui=undercurl
+highlight DiagnosticUnderlineWarn  guisp=#ffaa00 gui=undercurl
+highlight DiagnosticUnderlineInfo  guisp=#00aaff gui=undercurl
+highlight DiagnosticUnderlineHint  guisp=#00ff99 gui=undercurl
 ```
 
-Install plugins:
-Inside Neovim, run `:PlugInstall` or from shell:
+### Install Plugins
+Inside Neovim, run:
+```vim
+:PlugInstall
+```
+Or from shell:
 ```bash
 nvim +PlugInstall +qall
 ```
 
 ---
 
-## 5. Configure Kotlin LSP (Neovim 0.11+/0.12 API)
-
-Add the following below `call plug#end()` in `~/.config/nvim/init.vim`:
-
-```vim
-lua << EOF
-vim.lsp.config('kotlin_language_server', {
-  cmd = { '/root/kotlin-ls/server/bin/kotlin-language-server' },
-})
-
-vim.lsp.enable('kotlin_language_server')
-EOF
-```
-
----
-
-## 6. Usage
+## 5. Usage
 
 Open the project root to ensure the LSP detects the project context correctly:
 
@@ -115,77 +160,13 @@ Open a Kotlin file:
 
 ---
 
-## 7. Verify LSP
+## 6. Verify Setup
 
 Inside Neovim:
 
 *   **Check health:** `:checkhealth vim.lsp`
 *   **Check active clients:** `:lua print(vim.inspect(vim.lsp.get_clients()))`
-
-Expected: `kotlin_language_server` should appear in the list of active clients.
-
----
-
-## 8. Test Diagnostics
-
-Insert an intentional error (e.g., type mismatch):
-```kotlin
-val x: Int = "hello"
-```
-You should see diagnostics/error highlighting.
-
----
-
-## Mobile-Friendly UI Setup
-
-On mobile screens, diagnostic inline messages (virtual text) take up valuable horizontal space and can make code hard to read.
-
-### 1. Optimize Diagnostic Display
-
-Add this to `~/.config/nvim/init.vim` to hide inline text but keep markers:
-
-```vim
-lua << EOF
-vim.diagnostic.config({
-  virtual_text = false, -- Disable long inline messages
-  underline = true,    -- Keep code underlining
-  signs = true,        -- Keep gutter markers
-})
-EOF
-```
-
-### 2. Read Diagnostics on Demand
-
-Add keybindings to view full messages in a popup and navigate errors:
-
-```vim
-lua << EOF
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-vim.keymap.set('n', 'gl', vim.diagnostic.open_float)
-EOF
-```
-
-**Usage:**
-*   **`gl`**: Show full diagnostic message in a popup (float).
-*   **`]d`**: Jump to next diagnostic.
-*   **`[d`**: Jump to previous diagnostic.
-
-### 3. Enhanced Visibility (Optional)
-
-Improve diagnostic visibility with custom colors and undercurls:
-
-```vim
-highlight DiagnosticUnderlineError guisp=#ff5555 gui=undercurl
-highlight DiagnosticUnderlineWarn  guisp=#ffaa00 gui=undercurl
-highlight DiagnosticUnderlineInfo  guisp=#00aaff gui=undercurl
-highlight DiagnosticUnderlineHint  guisp=#00ff99 gui=undercurl
-```
-
-### 4. Apply Changes
-
-Reload your config inside Neovim or restart:
-`:source ~/.config/nvim/init.vim`
+*   **Test Autocomplete:** Start typing a Kotlin keyword or variable and press `<Tab>`.
 
 ---
 
@@ -196,4 +177,3 @@ Reload your config inside Neovim or restart:
 *   **Check LSP log:** `:edit ~/.local/state/nvim/lsp.log`
 *   **Check Neovim binary path:** `:echo v:progpath`
 *   **Verify lspconfig loaded:** `:lua print(vim.fn.exists(':LspInfo'))`
-    *(Note: `:LspInfo` may be replaced by `:checkhealth vim.lsp` in newer versions.)*

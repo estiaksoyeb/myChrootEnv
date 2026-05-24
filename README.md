@@ -41,6 +41,7 @@ For a deep dive into how these setups work and how to troubleshoot them, refer t
 - 💙 **[Flutter Setup](./Flutter%20Setup.md)**: Integrating Flutter with the ARM64-native SDK and fixing `cmdline-tools` path issues.
 - ⚙️ **[NDK & Native Code Setup](./NDK%20Setup.md)**: How to patch the Android NDK to use native ARM64 toolchains (`clang`, `make`, `ninja`) and fix linker errors.
 - ⌨️ **[Kotlin LSP Setup (Neovim)](./Kotlin%20LSP%20Setup.md)**: Working setup for Kotlin Language Server with Neovim 0.11+ in a chroot environment.
+- 🌑 **[Neovim Config](./ubuntu/.config/nvim/init.vim)**: Pre-configured `init.vim` with autocompletion, LSP, and mobile optimizations.
 - 🛠️ **[Termux Configuration](./termux/termux.properties)**: Optimized `termux.properties` with specialized Git and Vim macros.
 
 ---
