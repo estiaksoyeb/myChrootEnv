@@ -136,6 +136,59 @@ You should see diagnostics/error highlighting.
 
 ---
 
+## Mobile-Friendly UI Setup
+
+On mobile screens, diagnostic inline messages (virtual text) take up valuable horizontal space and can make code hard to read.
+
+### 1. Optimize Diagnostic Display
+
+Add this to `~/.config/nvim/init.vim` to hide inline text but keep markers:
+
+```vim
+lua << EOF
+vim.diagnostic.config({
+  virtual_text = false, -- Disable long inline messages
+  underline = true,    -- Keep code underlining
+  signs = true,        -- Keep gutter markers
+})
+EOF
+```
+
+### 2. Read Diagnostics on Demand
+
+Add keybindings to view full messages in a popup and navigate errors:
+
+```vim
+lua << EOF
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
+vim.keymap.set('n', 'gl', vim.diagnostic.open_float)
+EOF
+```
+
+**Usage:**
+*   **`gl`**: Show full diagnostic message in a popup (float).
+*   **`]d`**: Jump to next diagnostic.
+*   **`[d`**: Jump to previous diagnostic.
+
+### 3. Enhanced Visibility (Optional)
+
+Improve diagnostic visibility with custom colors and undercurls:
+
+```vim
+highlight DiagnosticUnderlineError guisp=#ff5555 gui=undercurl
+highlight DiagnosticUnderlineWarn  guisp=#ffaa00 gui=undercurl
+highlight DiagnosticUnderlineInfo  guisp=#00aaff gui=undercurl
+highlight DiagnosticUnderlineHint  guisp=#00ff99 gui=undercurl
+```
+
+### 4. Apply Changes
+
+Reload your config inside Neovim or restart:
+`:source ~/.config/nvim/init.vim`
+
+---
+
 ## Useful Debugging
 
 *   **Check loaded scripts:** `:scriptnames`
