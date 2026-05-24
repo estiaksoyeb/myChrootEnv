@@ -43,6 +43,7 @@ For a deep dive into how these setups work and how to troubleshoot them, refer t
 - ⌨️ **[Kotlin LSP Setup (Neovim)](./Kotlin%20LSP%20Setup.md)**: Working setup for Kotlin Language Server with Neovim 0.11+ in a chroot environment.
 - 🌑 **[Neovim Config](./ubuntu/.config/nvim/init.vim)**: Pre-configured `init.vim` with autocompletion, LSP, and mobile optimizations.
 - 🛠️ **[Termux Configuration](./termux/termux.properties)**: Optimized `termux.properties` with specialized Git and Vim macros.
+- 🛠️ **[Maintenance & Recovery Guide](./Maintenance%20Guide.md)**: Critical environment variables, Git configurations, and recovery steps to prevent setup headaches.
 
 ---
 
