@@ -1,6 +1,7 @@
 syntax on
 set termguicolors
 set number
+let mapleader=" "
 
 call plug#begin()
 
@@ -10,10 +11,16 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
 
+Plug 'lewis6991/gitsigns.nvim'
+
 call plug#end()
 
 lua << EOF
 local cmp = require('cmp')
+local gitsigns = require('gitsigns')
+
+gitsigns.setup()
+
 
 cmp.setup({
   mapping = {
@@ -46,6 +53,17 @@ vim.diagnostic.config({
 })
 
 vim.keymap.set('n', 'gl', vim.diagnostic.open_float)
+vim.keymap.set('n', 'K', vim.lsp.buf.hover)
+vim.keymap.set('n', 'gd', vim.lsp.buf.definition)
+vim.keymap.set('n', 'gr', vim.lsp.buf.references)
+vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, { remap = false })
+vim.keymap.set('n', 'rn', vim.lsp.buf.rename)
+vim.keymap.set('n', '<leader>hd', require('gitsigns').diffthis)
+vim.keymap.set('n', '<leader>hp', require('gitsigns').preview_hunk)
+vim.keymap.set('n', ']h', require('gitsigns').next_hunk)
+vim.keymap.set('n', '[h', require('gitsigns').prev_hunk)
+vim.keymap.set('n', '<leader>hr', require('gitsigns').reset_hunk)
+
 
 EOF
 
