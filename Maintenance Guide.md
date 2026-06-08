@@ -78,10 +78,41 @@ When working in `/sdcard` or shared folders on Android, Git will complain about 
 git config --global --add safe.directory /sdcard/Projects/YourProject
 ```
 
-### Termux Binaries in Chroot
-To use Termux binaries (like `termux-open` or `git` from Termux) inside the chroot, the path `/data/data/com.termux/files/usr/bin` must be in your `$PATH`.
+### Termux Binaries in Chroot (and Path Conflicts)
+To use Termux binaries (like `termux-open` or `git` from Termux) inside the chroot, the path `/data/data/com.termux/files/usr/bin` is typically added to your `$PATH`. 
+
+However, because this path is usually prepended, **Termux binaries take precedence over chroot binaries** of the same name. This can lead to "stuck" package versions if you install the same tool globally in both environments (e.g. Node/NPM packages).
+
+#### 🔍 Example Conflict: Outdated Global Packages
+If you install a package like `opencode-ai` inside both environments, you might run `npm i -g opencode-ai` in the chroot to update it, but executing `opencode` still runs the older Termux version.
+
+**How to Diagnose:**
+1. Check all paths of the command:
+   ```bash
+   type -a opencode
+   # Output:
+   # opencode is /data/data/com.termux/files/usr/bin/opencode  <-- Termux (prioritized)
+   # opencode is /usr/bin/opencode                            <-- Chroot
+   ```
+2. Check the version of each location directly:
+   ```bash
+   /data/data/com.termux/files/usr/bin/opencode --version
+   /usr/bin/opencode --version
+   ```
+
+**How to Fix:**
+1. Delete the overriding Termux binary symlink and node module:
+   ```bash
+   rm /data/data/com.termux/files/usr/bin/opencode
+   rm -rf /data/data/com.termux/files/usr/lib/node_modules/opencode-ai
+   ```
+2. **Clear the Shell Cache (Crucial):** Bash caches command paths in a hash table. After deleting the file, running the command immediately might cause a `No such file or directory` error. Clear the cache:
+   ```bash
+   hash -r
+   ```
 
 ---
+
 
 ## 5. Recovery Checklist
 1. Re-install the Ubuntu/Debian chroot.
