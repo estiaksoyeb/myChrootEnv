@@ -236,12 +236,19 @@ android {
 
 ## One-time Cleanup
 
-Previous failed attempts leave broken x86 AAPT2 artifacts in Gradle’s cache. This step is mandatory the first time.
+Previous failed attempts leave broken x86 AAPT2 artifacts in Gradle’s cache. You should only remove the poisoned AAPT2 cache entries rather than deleting the entire cache to avoid redownloading all project dependencies:
 
 ```bash
 ./gradlew --stop
+find "$HOME/.gradle/caches" -name "*aapt2*" -exec rm -rf {} + 2>/dev/null || true
+```
+
+If you still encounter issues and want a complete clean slate, you can wipe the entire Gradle cache (Warning: this will delete all cached dependencies and force your projects to redownload everything, which can take a long time on slow connections):
+
+```bash
 rm -rf ~/.gradle/caches
 ```
+
 
 ---
 
@@ -293,7 +300,7 @@ The working combination is:
 1. **android-sdk-custom** providing ARM64-native tools.
 2. **build-tools 36.1.0** with a working ARM64 `aapt2`.
 3. **Explicit AAPT2 override** in `gradle.properties`.
-4. **Clean Gradle caches** removing poisoned x86 artifacts.
+4. **Targeted cache cleanup** removing poisoned x86 AAPT2 artifacts.
 5. **Daemon-free builds** to avoid memory leaks on phones.
 
 Missing any one of these causes the build to fail.
@@ -305,7 +312,7 @@ Missing any one of these causes the build to fail.
 - Never use `build-tools 35.x` aapt2 on a phone.
 - Never rely on Gradle auto-selecting tools on Android.
 - Always pin `android.aapt2FromMavenOverride`.
-- Always clear caches after SDK changes.
+- Always clear poisoned AAPT2 caches after SDK changes.
 - Build and install are separate steps.
 - Prefer daemon-free builds on phones.
 

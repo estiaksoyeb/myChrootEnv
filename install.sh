@@ -127,8 +127,8 @@ if [ -f "./gradlew" ]; then
   echo "Stopping active Gradle daemons..."
   ./gradlew --stop 2>/dev/null || true
 fi
-echo "Cleaning Gradle cache..."
-rm -rf ~/.gradle/caches
+echo "Cleaning only poisoned AAPT2 cache entries..."
+find "$HOME/.gradle/caches" -name "*aapt2*" -exec rm -rf {} + 2>/dev/null || true
 
 echo "✅ ARM64 Android SDK installed"
 echo "✅ ARM64 AAPT2 forced globally"
