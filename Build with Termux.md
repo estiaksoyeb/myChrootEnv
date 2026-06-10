@@ -19,19 +19,20 @@ This article documents the exact, hardened setup that finally produces a real, i
 ## Table of Contents
 
 1. [The Real Problem](#the-real-problem)
-2. [The Missing Piece: android-sdk-custom](#the-missing-piece-android-sdk-custom)
-3. [Installing android-sdk-custom](#installing-android-sdk-custom)
-4. [Pointing the Environment to the Custom SDK](#pointing-the-environment-to-the-custom-sdk)
-5. [The Critical Discovery: AAPT2 Version Matters](#the-critical-discovery-aapt2-version-matters)
-6. [Forcing Gradle to use the ARM64 AAPT2](#forcing-gradle-to-use-the-arm64-aapt2)
-7. [compileSdk vs buildToolsVersion](#compile-sdk-vs-build-tools-version)
-8. [One-time Cleanup](#one-time-cleanup)
-9. [Building the App (Daemon vs No-Daemon)](#building-the-app-daemon-vs-no-daemon)
-10. [Installing the APK](#installing-the-apk)
-11. [NDK Setup for Native Code](./NDK%20Setup.md)
-12. [Flutter Setup](./Flutter%20Setup.md)
-13. [Why This Finally Works](#why-this-finally-works)
-14. [Hard Rules for Future Setups](#hard-rules-for-future-setups)
+2. [Installing and Configuring OpenJDK](#installing-and-configuring-openjdk)
+3. [The Missing Piece: android-sdk-custom](#the-missing-piece-android-sdk-custom)
+4. [Installing android-sdk-custom](#installing-android-sdk-custom)
+5. [Pointing the Environment to the Custom SDK](#pointing-the-environment-to-the-custom-sdk)
+6. [The Critical Discovery: AAPT2 Version Matters](#the-critical-discovery-aapt2-version-matters)
+7. [Forcing Gradle to use the ARM64 AAPT2](#forcing-gradle-to-use-the-arm64-aapt2)
+8. [compileSdk vs buildToolsVersion](#compile-sdk-vs-build-tools-version)
+9. [One-time Cleanup](#one-time-cleanup)
+10. [Building the App (Daemon vs No-Daemon)](#building-the-app-daemon-vs-no-daemon)
+11. [Installing the APK](#installing-the-apk)
+12. [NDK Setup for Native Code](./NDK%20Setup.md)
+13. [Flutter Setup](./Flutter%20Setup.md)
+14. [Why This Finally Works](#why-this-finally-works)
+15. [Hard Rules for Future Setups](#hard-rules-for-future-setups)
 
 ---
 
@@ -43,6 +44,72 @@ When Gradle tries to run them, the shell interprets the ELF file as text, causin
 > `Syntax error: Unterminated quoted string`
 
 As long as Gradle keeps using those x86 AAPT2 binaries, CLI builds on a phone will fail.
+
+---
+
+## Installing and Configuring OpenJDK
+
+Gradle requires a Java Development Kit (JDK) to compile and build Android applications. Depending on your environment (native Termux or a proot/chroot environment), the installation and path setup differ slightly.
+
+### 1. Installation
+
+#### Inside chroot / proot Environments (Ubuntu, Debian, Kali)
+Update the package lists and install the OpenJDK package:
+```bash
+apt update
+apt install openjdk-17-jdk
+```
+
+#### Inside Native Termux
+Update repositories and install the package:
+```bash
+pkg update
+pkg install openjdk-17
+```
+
+---
+
+### 2. Finding the Installation Path
+
+To set the `JAVA_HOME` environment variable, you need to find the directory where the JDK is installed.
+
+Run the following helper command, which automatically resolves symlinks to locate the JDK root directory:
+```bash
+dirname $(dirname $(readlink -f $(which javac)))
+```
+
+**Common Paths:**
+* **chroot/proot (Debian/Ubuntu/Kali):** `/usr/lib/jvm/java-17-openjdk-arm64` (or similar, depending on the Java version)
+* **Native Termux:** `/data/data/com.termux/files/usr/opt/openjdk`
+
+---
+
+### 3. Exporting `JAVA_HOME`
+
+To make the environment variable persistent across terminal sessions, add it to your shell configuration file (usually `~/.bashrc` or `~/.profile`).
+
+1. Open your shell configuration file:
+   ```bash
+   nano ~/.bashrc
+   ```
+
+2. Add the following lines at the bottom (replace `/usr/lib/jvm/java-17-openjdk-arm64` with the path returned by the command in step 2):
+   ```bash
+   export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-arm64
+   export PATH=$JAVA_HOME/bin:$PATH
+   ```
+
+3. Reload the shell configuration:
+   ```bash
+   source ~/.bashrc
+   ```
+
+**Verification:**
+Verify that Java is configured properly by running:
+```bash
+echo $JAVA_HOME
+java -version
+```
 
 ---
 
