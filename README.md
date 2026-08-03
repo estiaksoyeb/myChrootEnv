@@ -46,6 +46,8 @@ For a deep dive into how these setups work and how to troubleshoot them, refer t
 - 🛠️ **[Termux Configuration](./termux/termux.properties)**: Optimized `termux.properties` with specialized Git and Vim macros.
 - 🛠️ **[Maintenance & Recovery Guide](./Maintenance%20Guide.md)**: Critical environment variables, Git configurations, and recovery steps to prevent setup headaches.
 - 🔮 **[Antigravity CLI Patching](./Antigravity%20CLI%20Patching.md)**: How the CLI is patched to respect the 39-bit memory limit of Android kernels, and how to maintain it without an AI helper.
+- 💾 **[Tmux Persistence Setup](./Tmux%20Persistence%20Setup.md)**: Continuous auto-saving and auto-restoration for tmux sessions after power outages or system reboots.
+
 
 ---
 
