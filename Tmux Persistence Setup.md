@@ -20,7 +20,7 @@ Using **`tmux-resurrect`** and **`tmux-continuum`**, tmux continuously records s
 The setup relies on two core plugins inside `~/.tmux/plugins/`:
 
 - **`tmux-resurrect`**: Core engine that serializes tmux state (windows, panes, layouts, directories, scrollback, and processes) into text files located at `~/.local/share/tmux/resurrect/`.
-- **`tmux-continuum`**: Background worker that periodically calls `tmux-resurrect` every 5 minutes and triggers auto-restore when the tmux server starts up.
+- **`tmux-continuum`**: Background worker that periodically calls `tmux-resurrect` every 60 minutes (1 hour) and triggers auto-restore when the tmux server starts up.
 
 Command used to clone `tmux-continuum` (if not already installed via TPM):
 ```bash
@@ -41,7 +41,7 @@ set -g @plugin 'tmux-plugins/tmux-continuum'
 
 # Automatic Save & Restore (tmux-continuum)
 set -g @continuum-restore 'on'
-set -g @continuum-save-interval '5'
+set -g @continuum-save-interval '60'
 
 # Resurrect Settings
 set -g @resurrect-capture-pane-contents 'on'
