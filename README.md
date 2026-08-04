@@ -22,14 +22,15 @@ Android Gradle Plugin (AGP) and the official NDK often download or include `x86_
 ### 1. Setup Gemini CLI and Node.js
 Install Node.js 20 and the Gemini CLI for AI-assisted development:
 ```bash
-curl -sSL https://raw.githubusercontent.com/easoyeb/myChrootEnv/main/setup-gemini.sh | bash
+curl -sSL https://raw.githubusercontent.com/easoyeb/myChrootEnv/main/scripts/setup-gemini.sh | bash
 ```
 
 ### 2. Install ARM64 Android SDK
 Download the custom ARM64 SDK and configure your environment:
 ```bash
-curl -sSL https://raw.githubusercontent.com/easoyeb/myChrootEnv/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/easoyeb/myChrootEnv/main/scripts/install.sh | bash
 ```
+
 
 ---
 
@@ -37,16 +38,17 @@ curl -sSL https://raw.githubusercontent.com/easoyeb/myChrootEnv/main/install.sh 
 
 For a deep dive into how these setups work and how to troubleshoot them, refer to these guides:
 
-- 📱 **[Building Android Apps (AGP 8.x)](./Build%20with%20Termux.md)**: Detailed breakdown of the ARM64 SDK, AAPT2 overrides, and Gradle optimizations.
-- 💙 **[Flutter Setup](./Flutter%20Setup.md)**: Integrating Flutter with the ARM64-native SDK and fixing `cmdline-tools` path issues.
-- ⚙️ **[NDK & Native Code Setup](./NDK%20Setup.md)**: How to patch the Android NDK to use native ARM64 toolchains (`clang`, `make`, `ninja`) and fix linker errors.
-- ⌨️ **[Kotlin LSP Setup (Neovim)](./Kotlin%20LSP%20Setup.md)**: Working setup for Kotlin Language Server with Neovim 0.11+ in a chroot environment.
-- 🔑 **[SSH Setup](./SSH%20Setup.md)**: Accessing the Ubuntu sandbox via SSH from Termux for a seamless remote-like development experience.
+- 📱 **[Building Android Apps (AGP 8.x)](./docs/Build%20with%20Termux.md)**: Detailed breakdown of the ARM64 SDK, AAPT2 overrides, and Gradle optimizations.
+- 💙 **[Flutter Setup](./docs/Flutter%20Setup.md)**: Integrating Flutter with the ARM64-native SDK and fixing `cmdline-tools` path issues.
+- ⚙️ **[NDK & Native Code Setup](./docs/NDK%20Setup.md)**: How to patch the Android NDK to use native ARM64 toolchains (`clang`, `make`, `ninja`) and fix linker errors.
+- ⌨️ **[Kotlin LSP Setup (Neovim)](./docs/Kotlin%20LSP%20Setup.md)**: Working setup for Kotlin Language Server with Neovim 0.11+ in a chroot environment.
+- 🔑 **[SSH Setup](./docs/SSH%20Setup.md)**: Accessing the Ubuntu sandbox via SSH from Termux for a seamless remote-like development experience.
 - 🌑 **[Neovim Config](./ubuntu/.config/nvim/init.vim)**: Pre-configured `init.vim` with autocompletion, LSP, and mobile optimizations.
 - 🛠️ **[Termux Configuration](./termux/termux.properties)**: Optimized `termux.properties` with specialized Git and Vim macros.
-- 🛠️ **[Maintenance & Recovery Guide](./Maintenance%20Guide.md)**: Critical environment variables, Git configurations, and recovery steps to prevent setup headaches.
-- 🔮 **[Antigravity CLI Patching](./Antigravity%20CLI%20Patching.md)**: How the CLI is patched to respect the 39-bit memory limit of Android kernels, and how to maintain it without an AI helper.
-- 💾 **[Tmux Persistence Setup](./Tmux%20Persistence%20Setup.md)**: Continuous auto-saving and auto-restoration for tmux sessions after power outages or system reboots.
+- 🛠️ **[Maintenance & Recovery Guide](./docs/Maintenance%20Guide.md)**: Critical environment variables, Git configurations, and recovery steps to prevent setup headaches.
+- 🔮 **[Antigravity CLI Patching](./docs/Antigravity%20CLI%20Patching.md)**: How the CLI is patched to respect the 39-bit memory limit of Android kernels, and how to maintain it without an AI helper.
+- 💾 **[Tmux Persistence Setup](./docs/Tmux%20Persistence%20Setup.md)**: Continuous auto-saving and auto-restoration for tmux sessions after power outages or system reboots.
+
 
 
 ---
