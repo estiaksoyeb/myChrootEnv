@@ -1,6 +1,12 @@
 syntax on
 set termguicolors
 set number
+
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set expandtab
+
 let mapleader=" "
 
 call plug#begin()
@@ -43,7 +49,7 @@ vim.lsp.config('kotlin_language_server', {
   capabilities = capabilities,
 })
 
-vim.lsp.enable('kotlin_language_server')
+-- vim.lsp.enable('kotlin_language_server') --
 
 
 vim.diagnostic.config({
