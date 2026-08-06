@@ -164,3 +164,14 @@ esac
 if [ -n "$SSH_CONNECTION" ] && command -v tmux >/dev/null; then
     [ -z "$TMUX" ] && exec tmux new-session -A -s main
 fi
+
+# Initialize starship prompt
+eval "$(starship init bash)"
+
+# Fix environment variables for ble.sh
+export USER=${USER:-$(id -un)}
+export LANG=${LANG:-C.UTF-8}
+
+# Initialize ble.sh (auto-suggestions and syntax highlighting)
+[[ $- == *i* ]] && source ~/.local/share/blesh/ble.sh
+

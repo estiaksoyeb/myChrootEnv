@@ -43,6 +43,9 @@ For a deep dive into how these setups work and how to troubleshoot them, refer t
 - ⚙️ **[NDK & Native Code Setup](./docs/NDK%20Setup.md)**: How to patch the Android NDK to use native ARM64 toolchains (`clang`, `make`, `ninja`) and fix linker errors.
 - ⌨️ **[Kotlin LSP Setup (Neovim)](./docs/Kotlin%20LSP%20Setup.md)**: Working setup for Kotlin Language Server with Neovim 0.11+ in a chroot environment.
 - 🔑 **[SSH Setup](./docs/SSH%20Setup.md)**: Accessing the Ubuntu sandbox via SSH from Termux for a seamless remote-like development experience.
+- 🐚 **[Terminal Setup (Starship & ble.sh)](./docs/Terminal%20Setup.md)**: Guide to configuring a modern, auto-suggesting bash prompt, including fixes for chroot environments.
+- 🐚 **[Bash Config](./ubuntu/.bashrc)**: Pre-configured `.bashrc` loaded with AI aliases, history search (`fzf`), auto-suggestions (`ble.sh`), and the Starship prompt.
+- ✨ **[Starship Config](./ubuntu/.config/starship.toml)**: Clean, single-line "Pastel Powerline" prompt configuration.
 - 🌑 **[Neovim Config](./ubuntu/.config/nvim/init.vim)**: Pre-configured `init.vim` with autocompletion, LSP, and mobile optimizations.
 - 🛠️ **[Termux Configuration](./termux/termux.properties)**: Optimized `termux.properties` with specialized Git and Vim macros.
 - 🛠️ **[Maintenance & Recovery Guide](./docs/Maintenance%20Guide.md)**: Critical environment variables, Git configurations, and recovery steps to prevent setup headaches.
